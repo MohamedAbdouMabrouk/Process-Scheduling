@@ -11,17 +11,17 @@ simulation for process scheduling techniques like:
 
 Input Format:
 Line1. “trace” or “stats”
-    trace” is used to ask your program to visualize the processes switching over the CPU
-    “stats” is used to ask your program to write some statistics on the scheduled processes
+    “trace” is used to ask the program to visualize the processes switching over the CPU
+    “stats” is used to ask the program to write some statistics on the scheduled processes
     
 Line2. a comma-separated list telling which CPU scheduling policies to be analyzed/visualized along with 
     their parameters, if applicable. Each algorithm is represented by a number as listed in the 
-    introduction section and as shown in the attached testcases. 
+    attached examples directory. 
     Round Robin and Aging have a parameter specifying the quantum q to be used. Therefore, a policy 
     entered as 2-4 means Round Robin with q=4. Also, policy 8-1 means Aging with q=1.
     
 Line3. An integer specifying the last instant to be used in your simulation and to be shown on the timeline. 
-    Check the attached testcases
+    Check the attached examples directory.  
     
 Line4. An integer specifying the number of processes to be simulated. None of the processes is making a 
     blocking call.
