@@ -71,5 +71,6 @@ void init(char *tORs, char *type, int *length, int* pNumber);
 void initProc(int* pNumber, int* length, process **processes);
 void clear(int pNumber, int length, process **processes);
 char *translate(int task);
+void freeEm(int *pNumber, process **processes);
 
 #endif

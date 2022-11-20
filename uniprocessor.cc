@@ -33,6 +33,7 @@ int main()
 
         clear(pNumber, length, processes); // clear the out array of the processes for the next task
     }
+    freeEm(&pNumber, processes);
     return 0;
 }
 
@@ -53,6 +54,15 @@ void initProc(int *pNumber, int *length, process **processes)
         processes[i]->counter = processes[i]->len;
         processes[i]->index = i;
         processes[i]->out = (char *)malloc((*length) * sizeof(char));
+    }
+}
+
+void freeEm(int *pNumber, process **processes)
+{
+    for(int i = 0; i < *pNumber; i++)
+    {
+        free(processes[i]->out);
+        free(processes[i]);
     }
 }
 
@@ -384,12 +394,12 @@ void AGING(int length, int pNumber, process **processes, int max)
 
         if (idle)
         {
-            int j = pNumber; //to order the processes with the same priority
+            int j = pNumber; // to order the processes with the same priority
             while (!q.empty())
             {
                 int tempx = q.top().index;
-                processes[tempx]->counter++;//increment the process priority thoes are in the queue
-                processes[tempx]->level = j--;//to order the processes with the same priority
+                processes[tempx]->counter++;   // increment the process priority thoes are in the queue
+                processes[tempx]->level = j--; // to order the processes with the same priority
                 temp.push(*processes[tempx]);
                 q.pop();
             }
@@ -400,35 +410,36 @@ void AGING(int length, int pNumber, process **processes, int max)
                 temp.pop();
             }
 
-            if(index != -1)
-                q.push(*processes[index]);//push the process back
+            if (index != -1)
+                q.push(*processes[index]); // push the process back
 
-            index = q.top().index;//get the process with the highest proiorty
-            q.pop();//remove it from the queue and put it in the cpu
+            index = q.top().index; // get the process with the highest proiorty
+            q.pop();               // remove it from the queue and put it in the cpu
             idle = false;
         }
-        processes[index]->out[i] = '*';//
-        max--;//decrement the remaining tiem
-        if (max == 0)//times up?
+        processes[index]->out[i] = '*'; //
+        max--;                          // decrement the remaining tiem
+        if (max == 0)                   // times up?
         {
-            max = maxBU;//reset the quantom
-            processes[index]->counter = processes[index]->len;//reset the proiorty of the running queue
-            processes[index]->level = -1;//in the end of the queue
-            idle = true;//flag for the cpu to get a new process
+            max = maxBU;                                       // reset the quantom
+            processes[index]->counter = processes[index]->len; // reset the proiorty of the running queue
+            processes[index]->level = -1;                      // in the end of the queue
+            idle = true;                                       // flag for the cpu to get a new process
         }
     }
 }
 
 void printTrace(int length, int type, int max, int pNumber, process **processes)
 {
+    char* name = translate(type);
     if (type == 2)
-        printf("%s-%d  ", translate(type), max);
+        printf("%s-%d  ", name, max);
     else if (type == 3 || type == 4)
-        printf("%s   ", translate(type));
+        printf("%s   ", name);
     else if (type == 7 || type == 8)
-        printf("%s ", translate(type));
+        printf("%s ", name);
     else
-        printf("%s  ", translate(type));
+        printf("%s  ", name);
 
     for (int i = 0; i < length + 1; i++)
     {
@@ -448,11 +459,13 @@ void printTrace(int length, int type, int max, int pNumber, process **processes)
         printf("| \n");
     }
     printf("------------------------------------------------\n\n");
+    free(name);
 }
 
 void printStats(int length, int type, int max, int pNumber, process **processes)
-{
-    type == 2 ? printf("%s-%d\n", translate(type), max) : printf("%s\n", translate(type));
+{   
+    char *name = translate(type);
+    type == 2 ? printf("%s-%d\n", name, max) : printf("%s\n", name);
     printf("Process    |");
     for (int i = 0; i < pNumber; i++)
     {
@@ -502,6 +515,7 @@ void printStats(int length, int type, int max, int pNumber, process **processes)
     mean /= pNumber;
     mean > 9 ? printf("%0.2f|\n", mean) : printf(" %0.2f|\n", mean);
     printf("\n");
+    free(name);
 }
 
 char *translate(int task)
