@@ -8,7 +8,7 @@ int main()
     int pNumber;
     init(tORs, type, &length, &pNumber); // take the input
 
-    process *processes[pNumber];
+    Process *processes[pNumber];
     initProc(&pNumber, &length, processes); // build the process
 
     int task, max = 0;
@@ -45,11 +45,11 @@ void init(char *tORs, char *type, int *length, int *pNumber)
     fscanf(stdin, "%d", pNumber);
 }
 
-void initProc(int *pNumber, int *length, process **processes)
+void initProc(int *pNumber, int *length, Process **processes)
 {
     for (int i = 0; i < *pNumber; i++)
     {
-        processes[i] = (process *)malloc(sizeof(process));
+        processes[i] = (Process *)malloc(sizeof(Process));
         fscanf(stdin, "\n%[^,],%d,%d", processes[i]->name, &processes[i]->start, &processes[i]->len);
         processes[i]->counter = processes[i]->len;
         processes[i]->index = i;
@@ -57,7 +57,7 @@ void initProc(int *pNumber, int *length, process **processes)
     }
 }
 
-void freeEm(int *pNumber, process **processes)
+void freeEm(int *pNumber, Process **processes)
 {
     for(int i = 0; i < *pNumber; i++)
     {
@@ -66,7 +66,7 @@ void freeEm(int *pNumber, process **processes)
     }
 }
 
-void clear(int pNumber, int length, process **processes)
+void clear(int pNumber, int length, Process **processes)
 {
     for (int i = 0; i < pNumber; i++)
     {
@@ -78,7 +78,7 @@ void clear(int pNumber, int length, process **processes)
     }
 }
 
-void switchTask(int task, int max, int length, int pNumber, process **processes)
+void switchTask(int task, int max, int length, int pNumber, Process **processes)
 {
     // send the task for the required scheduling
     switch (task)
@@ -112,9 +112,9 @@ void switchTask(int task, int max, int length, int pNumber, process **processes)
     }
 }
 
-void FCFS(int length, int pNumber, process **processes)
+void FCFS(int length, int pNumber, Process **processes)
 {
-    queue<process> q;                // make a queue
+    queue<Process> q;                // make a queue
     for (int i = 0; i < length; i++) // time line
     {
         for (int j = 0; j < pNumber; j++) // see if any process want to get in the queue
@@ -132,9 +132,9 @@ void FCFS(int length, int pNumber, process **processes)
     }
 }
 
-void RR(int length, int pNumber, process **processes, int max)
+void RR(int length, int pNumber, Process **processes, int max)
 {
-    queue<process> q; // make a queue
+    queue<Process> q; // make a queue
     int maxBU = max;
     int p = -1;
     for (int i = 0; i < length; i++) // time line
@@ -168,9 +168,9 @@ void RR(int length, int pNumber, process **processes, int max)
     }
 }
 
-void SPN(int length, int pNumber, process **processes)
+void SPN(int length, int pNumber, Process **processes)
 {
-    priority_queue<process, vector<process>, compareLen> q; // make a priority queue
+    priority_queue<Process, vector<Process>, CompareLen> q; // make a priority queue
     int index = -1;
     for (int i = 0; i < length; i++) // time line
     {
@@ -193,9 +193,9 @@ void SPN(int length, int pNumber, process **processes)
     }
 }
 
-void SRT(int length, int pNumber, process **processes)
+void SRT(int length, int pNumber, Process **processes)
 {
-    priority_queue<process, vector<process>, compareLen> q; // make a priority queue (with the lowest running time first)
+    priority_queue<Process, vector<Process>, CompareLen> q; // make a priority queue (with the lowest running time first)
     for (int i = 0; i < length; i++)                        // time line
     {
         for (int j = 0; j < pNumber; j++) /// see if any process want to get in the queue
@@ -213,10 +213,10 @@ void SRT(int length, int pNumber, process **processes)
     }
 }
 
-void HRRN(int length, int pNumber, process **processes)
+void HRRN(int length, int pNumber, Process **processes)
 {
-    priority_queue<process, vector<process>, compareRatio> q; // make a priority queue (with the greatest ratio first)
-    queue<process> temp;                                      // temp queue to update the ratio
+    priority_queue<Process, vector<Process>, CompareRatio> q; // make a priority queue (with the greatest ratio first)
+    queue<Process> temp;                                      // temp queue to update the ratio
     int index = -1;
     for (int i = 0; i < length; i++)
     {
@@ -253,11 +253,11 @@ void HRRN(int length, int pNumber, process **processes)
     }
 }
 
-void FB_1(int length, int pNumber, process **processes)
+void FB_1(int length, int pNumber, Process **processes)
 {
-    queue<process> RQ[pNumber + 1]; // make queues
+    queue<Process> RQ[pNumber + 1]; // make queues
     int max, index, PIS = 0;
-    process *p = NULL;
+    Process *p = NULL;
     bool idle = true;                // flag for the CPU
     for (int i = 0; i < length; i++) // time line
     {
@@ -315,12 +315,12 @@ void FB_1(int length, int pNumber, process **processes)
     }
 }
 
-void FB_2i(int length, int pNumber, process **processes)
+void FB_2i(int length, int pNumber, Process **processes)
 {
 
-    queue<process> RQ[pNumber + 1]; // make queues
+    queue<Process> RQ[pNumber + 1]; // make queues
     int max, index, PIS = 0;
-    process *p = NULL;
+    Process *p = NULL;
     bool idle = true;                // flag for the CPU
     for (int i = 0; i < length; i++) // time line
     {
@@ -377,10 +377,10 @@ void FB_2i(int length, int pNumber, process **processes)
     }
 }
 
-void AGING(int length, int pNumber, process **processes, int max)
+void AGING(int length, int pNumber, Process **processes, int max)
 {
-    priority_queue<process, vector<process>, comparePriority> q; // make a priority queue (with the highest priority first)
-    queue<process> temp;
+    priority_queue<Process, vector<Process>, ComparePriority> q; // make a priority queue (with the highest priority first)
+    queue<Process> temp;
     int index = -1, maxBU = max;
     bool idle = true;
     for (int i = 0; i < length; i++) // time line
@@ -429,7 +429,7 @@ void AGING(int length, int pNumber, process **processes, int max)
     }
 }
 
-void printTrace(int length, int type, int max, int pNumber, process **processes)
+void printTrace(int length, int type, int max, int pNumber, Process **processes)
 {
     char* name = translate(type);
     if (type == 2)
@@ -462,7 +462,7 @@ void printTrace(int length, int type, int max, int pNumber, process **processes)
     free(name);
 }
 
-void printStats(int length, int type, int max, int pNumber, process **processes)
+void printStats(int length, int type, int max, int pNumber, Process **processes)
 {   
     char *name = translate(type);
     type == 2 ? printf("%s-%d\n", name, max) : printf("%s\n", name);
